@@ -1,52 +1,44 @@
 import sys
-import pygame
 import argparse
 from pathlib import Path
 from pynput import keyboard
+from playsound import playsound
 
 SCRIPT_PATH = Path(__file__).resolve()
 FOLDER_PATH = SCRIPT_PATH.parent
-SOUNDS_PATH = FOLDER_PATH / '../assets/sound/gun/gunfire.mp3'
-
-def load_sound(path: Path) -> None:
-    pygame.mixer.music.load(path)
+SOUNDS_PATH = {
+    'press':   FOLDER_PATH / '../assets/sound/mechanical_switch /blue-switch-press-1.mp3',
+    'release': FOLDER_PATH / '../assets/sound/mechanical_switch /blue-switch-release-1.mp3'
+}
 
 def on_press(key: keyboard.Key) -> None:
-    match key:
-        case keyboard.KeyCode(char='a'):
-            pygame.mixer.music.play()
-        case _:
-            pass
+    # if key == keyboard.KeyCode(char='a'):
+    playsound(SOUNDS_PATH['press'])
 
 def on_release(key: keyboard.Key) -> None:
-    pass
+    # if key == keyboard.KeyCode(char='a'):
+    playsound(SOUNDS_PATH['release'])
 
 def parse_arguments() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser()
-    parser.add_argument('-l', '--list', action='store_true', help='list all sound style')
-    parser.add_argument('-s', '--start', action='store_true', help='start listen keyboard')
+    parser.add_argument('-l', '--list', action='store_true', help='list all sound styles')
+    parser.add_argument('-s', '--start', action='store_true', help='start listening to keyboard')
     return parser
 
 def main() -> int:
-    Parser = parse_arguments()
-    Args = Parser.parse_args()
+    parser = parse_arguments()
+    args = parser.parse_args()
 
-    if Args.list:
+    if args.list:
         print("verbosity turned on")
 
-    elif Args.start:
-        pygame.mixer.init()
-        load_sound(SOUNDS_PATH)
-
+    elif args.start:
         with keyboard.Listener(on_press=on_press, on_release=on_release) as listener:
             listener.join()
 
-    else: Parser.print_help()
+    else: parser.print_help()
     
     return 0
 
 if __name__ == '__main__':
     sys.exit(main())
-
-
-
