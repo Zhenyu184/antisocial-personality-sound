@@ -13,30 +13,32 @@ SOUNDS_PATH = {
 
 def on_press(key: keyboard.Key) -> None:
     # if key == keyboard.KeyCode(char='a'):
-    playsound(SOUNDS_PATH['press'])
+    try:
+        playsound(SOUNDS_PATH['press'])
+    except Exception as err: print(err)
 
 def on_release(key: keyboard.Key) -> None:
     # if key == keyboard.KeyCode(char='a'):
-    playsound(SOUNDS_PATH['release'])
+    try:
+        playsound(SOUNDS_PATH['release'])
+    except Exception as err: print(err)
+
 
 def parse_arguments() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser()
-    parser.add_argument('-l', '--list', action='store_true', help='list all sound styles')
-    parser.add_argument('-s', '--start', action='store_true', help='start listening to keyboard')
+    parser.add_argument('-i', '--info', action='store_true', help='info info')
     return parser
 
 def main() -> int:
     parser = parse_arguments()
     args = parser.parse_args()
 
-    if args.list:
-        print("verbosity turned on")
+    if args.info:
+        print('info info')
 
-    elif args.start:
+    else: 
         with keyboard.Listener(on_press=on_press, on_release=on_release) as listener:
             listener.join()
-
-    else: parser.print_help()
     
     return 0
 
