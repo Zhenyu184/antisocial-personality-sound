@@ -1,4 +1,5 @@
 import sys
+import pygame
 import argparse
 from pathlib import Path
 from pynput import keyboard
@@ -34,8 +35,6 @@ def main() -> int:
         print("verbosity turned on")
 
     elif Args.start:
-        import pygame
-
         pygame.mixer.init()
         load_sound(SOUNDS_PATH)
 
